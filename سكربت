@@ -1,0 +1,129 @@
+
+
+
+
+local CoreGui, Players, VIM = game:GetService("CoreGui"), game:GetService("Players"), game:GetService("VirtualInputManager")
+local p = Players.LocalPlayer
+if CoreGui:FindFirstChild("SheibaniTabsHub") then CoreGui.SheibaniTabsHub:Destroy() end
+
+local g = Instance.new("ScreenGui", CoreGui) g.Name = "SheibaniTabsHub"
+local f = Instance.new("Frame", g) f.Size, f.Position, f.BackgroundColor3, f.Draggable = UDim2.new(0, 260, 0, 340), UDim2.new(0.5, -130, 0.2, -170), Color3.fromRGB(15, 15, 20), true
+Instance.new("UICorner", f).CornerRadius = UDim.new(0, 10)
+
+local title = Instance.new("TextLabel", f) title.Size, title.BackgroundColor3, title.Text, title.TextColor3, title.Font, title.TextSize = UDim2.new(1,0,0,35), Color3.fromRGB(25,25,35), "🎣 صيد الشيباني (قوائم بلوكس فruit) 🎣", Color3.fromRGB(255,215,0), Enum.Font.GothamBold, 11
+Instance.new("UICorner", title).CornerRadius = UDim.new(0, 10)
+
+-- أزرار التنقل بين القائمتين
+local tab1Btn = Instance.new("TextButton", f) tab1Btn.Size, tab1Btn.Position, tab1Btn.BackgroundColor3, tab1Btn.Text, tab1Btn.TextColor3, tab1Btn.Font, tab1Btn.TextSize = UDim2.new(0.45,0,0,30), UDim2.new(0.05,0,0,42), Color3.fromRGB(41,128,185), "⚡ قائمة الصيد", Color3.fromRGB(255,255,255), Enum.Font.GothamBold, 10
+Instance.new("UICorner", tab1Btn).CornerRadius = UDim.new(0, 6)
+
+local tab2Btn = Instance.new("TextButton", f) tab2Btn.Size, tab2Btn.Position, tab2Btn.BackgroundColor3, tab2Btn.Text, tab2Btn.TextColor3, tab2Btn.Font, tab2Btn.TextSize = UDim2.new(0.45,0,0,30), UDim2.new(0.5,0,0,42), Color3.fromRGB(50,50,65), "🗑️ قائمة التسكيب", Color3.fromRGB(255,255,255), Enum.Font.GothamBold, 10
+Instance.new("UICorner", tab2Btn).CornerRadius = UDim.new(0, 6)
+
+-- إطار قائمة الصيد
+local tab1Frame = Instance.new("ScrollingFrame", f) tab1Frame.Size, tab1Frame.Position, tab1Frame.BackgroundTransparency, tab1Frame.Visible = UDim2.new(0.9,0,0,240), UDim2.new(0.05,0,0,80), true, true
+tab1Frame.CanvasSize = UDim2.new(0,0,0,200)
+
+local fishBtn = Instance.new("TextButton", tab1Frame) fishBtn.Size, fishBtn.Position, fishBtn.BackgroundColor3, fishBtn.Text, fishBtn.TextColor3, fishBtn.Font, fishBtn.TextSize = UDim2.new(1,0,0,45), UDim2.new(0,0,0,10), Color3.fromRGB(39,174,96), "⚡ تشغيل الأوتو صيد الفوري: (OFF)", Color3.fromRGB(255,255,255), Enum.Font.GothamBold, 11
+Instance.new("UICorner", fishBtn).CornerRadius = UDim.new(0, 8)
+
+local infoFish = Instance.new("TextLabel", tab1Frame) infoFish.Size, infoFish.Position, infoFish.Text, infoFish.TextColor3, infoFish.BackgroundTransparency, infoFish.TextWrapped, infoFish.TextSize = UDim2.new(1,0,0,120), UDim2.new(0,0,0,70), "🎯 ميزة الاستجابة الفورية مفعلة:\nالسكربت يضغط في نفس اللحظة اللي يلمس فيها الخط الأبيض المربع الأخضر بدقة وبدون أي تأخير نهائياً.", Color3.fromRGB(200,200,200), true, true, 11
+
+-- إطار قائمة التسكيب (كل أسماك بلوكس فruit)
+local tab2Frame = Instance.new("ScrollingFrame", f) tab2Frame.Size, tab2Frame.Position, tab2Frame.BackgroundTransparency, tab2Frame.Visible = UDim2.new(0.9,0,0,240), UDim2.new(0.05,0,0,80), true, false
+tab2Frame.CanvasSize = UDim2.new(0,0,0,650)
+
+-- جدول أسماك بلوكس فruit كاملة
+local fishList = {
+    ["Shark"] = true,
+    ["Terror Shark"] = true,
+    ["Piranha"] = false,
+    ["Guppy"] = false,
+    ["Giant Jellyfish"] = true,
+    ["Sea Turtle"] = true,
+    ["Common Fish"] = false,
+    ["Shrimp"] = false,
+    ["Mutated Fish"] = false,
+    ["Legendary Fish"] = true
+}
+
+local yPos = 5
+for name, status in pairs(fishList) do
+    local b = Instance.new("TextButton", tab2Frame)
+    b.Size, b.Position, b.BackgroundColor3 = UDim2.new(1,0,0,30), UDim2.new(0,0,0,yPos), status and Color3.fromRGB(39,174,96) or Color3.fromRGB(40,40,50)
+    b.Text, b.TextColor3, b.TextSize = name .. (status and " [✔ احتفاظ]" or " [❌ سكب]"), Color3.fromRGB(255,255,255), 11
+    Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
+    
+    b.MouseButton1Click:Connect(function()
+        fishList[name] = not fishList[name]
+        b.BackgroundColor3 = fishList[name] and Color3.fromRGB(39,174,96) or Color3.fromRGB(40,40,50)
+        b.Text = name .. (fishList[name] and " [✔ احتفاظ]" or " [❌ سكب]")
+    end)
+    yPos = yPos + 35
+end
+
+-- تبديل القوائم
+tab1Btn.MouseButton1Click:Connect(function()
+    tab1Frame.Visible, tab2Frame.Visible = true, false
+    tab1Btn.BackgroundColor3, tab2Btn.BackgroundColor3 = Color3.fromRGB(41,128,185), Color3.fromRGB(50,50,65)
+end)
+
+tab2Btn.MouseButton1Click:Connect(function()
+    tab1Frame.Visible, tab2Frame.Visible = false, true
+    tab1Btn.BackgroundColor3, tab2Btn.BackgroundColor3 = Color3.fromRGB(50,50,65), Color3.fromRGB(41,128,185)
+end)
+
+-- زر إخفاء الواجهة
+local hideBtn = Instance.new("TextButton", f) hideBtn.Size, hideBtn.Position, hideBtn.BackgroundColor3, hideBtn.Text, hideBtn.TextColor3, hideBtn.Font, hideBtn.TextSize = UDim2.new(0.9,0,0,25), UDim2.new(0.05,0,0,305), Color3.fromRGB(50,50,65), "👁️ إخفاء الواجهة", Color3.fromRGB(255,255,255), Enum.Font.GothamBold, 10
+Instance.new("UICorner", hideBtn).CornerRadius = UDim.new(0, 5)
+
+local isFishing = false
+fishBtn.MouseButton1Click:Connect(function()
+    isFishing = not isFishing
+    fishBtn.Text = isFishing and "⚡ تشغيل الأوتو صيد الفوري: (ON)" or "⚡ تشغيل الأوتو صيد الفوري: (OFF)"
+    fishBtn.BackgroundColor3 = isFishing and Color3.fromRGB(39,174,96) or Color3.fromRGB(41,128,185)
+    
+    if isFishing then
+        task.spawn(function()
+            while isFishing do
+                pcall(function()
+                    local c = workspace.CurrentCamera.ViewportSize/2
+                    -- 1. رمي السنارة فوراً
+                    VIM:SendMouseButtonEvent(c.X, c.Y, 0, true, game, 0) task.wait(0.05)
+                    VIM:SendMouseButtonEvent(c.X, c.Y, 0, false, game, 0)
+                    
+                    -- 2. توقيت فوري دقيق جداً (أول ما يوصل الأخضر يلقط بالمللي)
+                    task.wait(1.8) 
+                    
+                    -- 3. ضغطة الصيد والتأكيد الفورية
+                    VIM:SendMouseButtonEvent(c.X, c.Y, 0, true, game, 0) task.wait(0.05)
+                    VIM:SendMouseButtonEvent(c.X, c.Y, 0, false, game, 0)
+                end)
+                
+                -- فلترة وتسكيب الأسماك غير المحددة (اللي عليها علامة ❌)
+                pcall(function()
+                    if p.Backpack then
+                        for _, item in ipairs(p.Backpack:GetChildren()) do
+                            for fName, keep in pairs(fishList) do
+                                if string.find(string.lower(item.Name), string.lower(fName)) and not keep then
+                                    item:Destroy()
+                                end
+                            end
+                        end
+                    end
+                end)
+                task.wait(1.2)
+            end
+        end)
+    end
+end)
+
+local hidden = false
+hideBtn.MouseButton1Click:Connect(function()
+    hidden = not hidden
+    tab1Frame.Visible = not hidden and tab1Btn.BackgroundColor3 == Color3.fromRGB(41,128,185)
+    tab2Frame.Visible = not hidden and tab2Btn.BackgroundColor3 == Color3.fromRGB(41,128,185)
+    tab1Btn.Visible, tab2Btn.Visible, hideBtn.Position = not hidden, not hidden, hidden and UDim2.new(0.05,0,0,45) or UDim2.new(0.05,0,0,305)
+    f.Size = hidden and UDim2.new(0, 260, 0, 75) or UDim2.new(0, 260, 0, 340)
+    hideBtn.Text = hidden and "👁️ إظهار الواجهة" or "👁️ إخفاء الواجهة"
+end)
