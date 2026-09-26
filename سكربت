@@ -2,6 +2,7 @@
 
 
 
+
 local CoreGui, Players, VIM = game:GetService("CoreGui"), game:GetService("Players"), game:GetService("VirtualInputManager")
 local p = Players.LocalPlayer
 if CoreGui:FindFirstChild("SheibaniTabsHub") then CoreGui.SheibaniTabsHub:Destroy() end
