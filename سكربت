@@ -19,8 +19,7 @@ Instance.new("UICorner", tab1Btn).CornerRadius = UDim.new(0, 6)
 
 local tab2Btn = Instance.new("TextButton", f) tab2Btn.Size, tab2Btn.Position, tab2Btn.BackgroundColor3, tab2Btn.Text, tab2Btn.TextColor3, tab2Btn.Font, tab2Btn.TextSize = UDim2.new(0.45,0,0,30), UDim2.new(0.5,0,0,42), Color3.fromRGB(50,50,65), "🗑️ قائمة التسكيب", Color3.fromRGB(255,255,255), Enum.Font.GothamBold, 10
 Instance.new("UICorner", tab2Btn).CornerRadius = UDim.new(0, 6)
-
--- إطار قائمة الصيد
+ -- إطار قائمة الصيد
 local tab1Frame = Instance.new("ScrollingFrame", f) tab1Frame.Size, tab1Frame.Position, tab1Frame.BackgroundTransparency, tab1Frame.Visible = UDim2.new(0.9,0,0,240), UDim2.new(0.05,0,0,80), true, true
 tab1Frame.CanvasSize = UDim2.new(0,0,0,200)
 
