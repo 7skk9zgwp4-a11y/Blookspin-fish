@@ -93,7 +93,7 @@ fishBtn.MouseButton1Click:Connect(function()
                     VIM:SendMouseButtonEvent(c.X, c.Y, 0, false, game, 0)
                     
                     -- 2. توقيت فوري دقيق جداً (أول ما يوصل الأخضر يلقط بالمللي)
-                    task.wait(1.8) 
+                    task.wait(0.5) 
                     
                     -- 3. ضغطة الصيد والتأكيد الفورية
                     VIM:SendMouseButtonEvent(c.X, c.Y, 0, true, game, 0) task.wait(0.05)
